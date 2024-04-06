@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cmarin20/dnq-ecommerce/internal/config/db"
 	"cmarin20/dnq-ecommerce/internal/config/server"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 
@@ -15,6 +16,9 @@ func main() {
 	if err != nil {
 		logger.Fatal("Error loading .env file")
 	}
+
+	db.NewDbConn(db.NewDbConfig(), logger)
+
 	//GIN server instance
 	server := server.NewServer()
 	server.Routes()

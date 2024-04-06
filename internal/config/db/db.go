@@ -3,6 +3,7 @@ package db
 import (
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"fmt"
+	"os"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -18,26 +19,24 @@ type DbConfig struct {
 
 func NewDbConfig() DbConfig {
 	return DbConfig{
-		Host:     "localhost",
-		Port:     "5432",
-		User:     "postgres",
-		Password: "password",
-		DbName:   "ecommerce",
+		Host:     os.Getenv("DB_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		User:     os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASSWORD"),
+		DbName:   os.Getenv("DB_NAME"),
 	}
 }
 
 func NewDbConn(cfg DbConfig, logger *logger.Logger) *gorm.DB {
 	logger.Info("Opening a new database connection...")
 	connStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DbName)
-
 	db, err := gorm.Open(mysql.Open(connStr), &gorm.Config{})
-
 	if err != nil {
 		logger.Error("error to open database connection: %v", err)
+		return nil
 	}
 
 	return db
-
 }
 
 func CloseDbConn(db *gorm.DB, logger *logger.Logger) error {
