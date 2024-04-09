@@ -50,15 +50,20 @@ func (s *service) CreateUser(user userDto.UserDto) error {
 		return fmt.Errorf("user already exists")
 	}
 
+	hashedPassword, err := utils.EncodePassword(user.Password)
+	if err != nil {
+		s.logger.Error("Error encoding password: %v", err)
+	}
+
 	userModel.Name = user.Name
 	userModel.Email = user.Email
 	userModel.Prefix = user.Prefix
 	userModel.Phone = user.Phone
 	userModel.Address = user.Address
-	userModel.Password = user.Password
+	userModel.Password = hashedPassword
 	userModel.FkRole = 1
 
-	err := s.repo.CreateUser(userModel)
+	err = s.repo.CreateUser(userModel)
 	if err != nil {
 		return err
 	}
