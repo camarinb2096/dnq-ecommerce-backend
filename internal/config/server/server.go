@@ -1,6 +1,7 @@
 package server
 
 import (
+	userEndpoint "cmarin20/dnq-ecommerce/internal/user/endpoint"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 
 	"github.com/gin-gonic/gin"
@@ -16,12 +17,13 @@ func NewServer() Server {
 	return s
 }
 
-func (s *Server) Routes() {
-	s.router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
+func (s *Server) Routes(userEndpoint userEndpoint.Endpoints) {
+	user := s.router.Group("/api/v1/user")
+	{
+		user.POST("/", func(c *gin.Context) {
+			userEndpoint.Post(c)
 		})
-	})
+	}
 }
 
 func (s *Server) Run(logger *logger.Logger) {

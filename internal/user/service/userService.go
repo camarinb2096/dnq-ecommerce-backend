@@ -1,26 +1,67 @@
 package userService
 
 import (
-	userRepo "cmarin20/dnq-ecommerce/internal/user/repository"
+	"cmarin20/dnq-ecommerce/internal/config/db/repository"
+	userDto "cmarin20/dnq-ecommerce/internal/user/dto"
+	userModel "cmarin20/dnq-ecommerce/internal/user/model"
 	"cmarin20/dnq-ecommerce/pkg/logger"
+	"cmarin20/dnq-ecommerce/pkg/utils"
+	"fmt"
 )
 
 type Services interface {
-	CreateUser()
+	CreateUser(user userDto.UserDto) error
 }
 
 type service struct {
-	repo   userRepo.Repository
+	repo   repository.Repository
 	logger *logger.Logger
 }
 
-func NewService(repo userRepo.Repository, logger *logger.Logger) Services {
+func NewService(repo repository.Repository, logger *logger.Logger) Services {
 	return &service{
 		repo:   repo,
 		logger: logger,
 	}
 }
 
-func (s *service) CreateUser() {
+func (s *service) CreateUser(user userDto.UserDto) error {
+	var userModel userModel.User
 	s.logger.Info("Creating a new user...")
+
+	if user.Name == "" {
+		return fmt.Errorf("name is required")
+	}
+
+	if user.Email == "" {
+		return fmt.Errorf("email is required")
+	} else if !utils.IsValidEmail(user.Email) {
+		return fmt.Errorf("invalid email")
+	}
+
+	if user.Password == "" {
+		return fmt.Errorf("password is required")
+	} else if !utils.IsStrongPassword(user.Password) {
+		return fmt.Errorf("the password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character")
+	}
+
+	existingUser := s.repo.FindUserByEmail(user.Email)
+	if existingUser != 0 {
+		return fmt.Errorf("user already exists")
+	}
+
+	userModel.Name = user.Name
+	userModel.Email = user.Email
+	userModel.Prefix = user.Prefix
+	userModel.Phone = user.Phone
+	userModel.Address = user.Address
+	userModel.Password = user.Password
+	userModel.FkRole = 1
+
+	err := s.repo.CreateUser(userModel)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
