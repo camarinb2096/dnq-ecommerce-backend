@@ -24,7 +24,7 @@ func NewEndpoints(s userService.Services) Endpoints {
 
 func createUser(s userService.Services) Controller {
 	return func(c *gin.Context) {
-		var user userDto.UserDto
+		var user userDto.CreateRequest
 		json.NewDecoder(c.Request.Body).Decode(&user)
 
 		err := s.CreateUser(user)

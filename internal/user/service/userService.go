@@ -7,10 +7,11 @@ import (
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"cmarin20/dnq-ecommerce/pkg/utils"
 	"fmt"
+	"strings"
 )
 
 type Services interface {
-	CreateUser(user userDto.UserDto) error
+	CreateUser(user userDto.CreateRequest) error
 }
 
 type service struct {
@@ -25,7 +26,7 @@ func NewService(repo repository.Repository, logger *logger.Logger) Services {
 	}
 }
 
-func (s *service) CreateUser(user userDto.UserDto) error {
+func (s *service) CreateUser(user userDto.CreateRequest) error {
 	var userModel userModel.User
 	s.logger.Info("Creating a new user...")
 
@@ -55,7 +56,7 @@ func (s *service) CreateUser(user userDto.UserDto) error {
 		s.logger.Error("Error encoding password: %v", err)
 	}
 
-	userModel.Name = user.Name
+	userModel.Name = strings.ToUpper(user.Name)
 	userModel.Email = user.Email
 	userModel.Prefix = user.Prefix
 	userModel.Phone = user.Phone
