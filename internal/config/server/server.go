@@ -1,6 +1,7 @@
 package server
 
 import (
+	productsEndpoint "cmarin20/dnq-ecommerce/internal/products/endpoint"
 	userEndpoint "cmarin20/dnq-ecommerce/internal/user/endpoint"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 
@@ -32,12 +33,18 @@ func configCors() gin.HandlerFunc {
 	}
 }
 
-func (s *Server) Routes(userEndpoint userEndpoint.Endpoints) {
+func (s *Server) Routes(userEndpoint userEndpoint.Endpoints, productsEndpoint productsEndpoint.Endpoints) {
 	s.router.Use(configCors())
 	user := s.router.Group("/api/v1/user")
 	{
 		user.POST("/", func(c *gin.Context) {
 			userEndpoint.Post(c)
+		})
+	}
+	product := s.router.Group("/api/v1/products")
+	{
+		product.GET("/", func(c *gin.Context) {
+			productsEndpoint.Get(c)
 		})
 	}
 }

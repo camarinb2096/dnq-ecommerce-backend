@@ -1,6 +1,7 @@
 package db
 
 import (
+	productsModel "cmarin20/dnq-ecommerce/internal/products/model"
 	userModel "cmarin20/dnq-ecommerce/internal/user/model"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"fmt"
@@ -39,6 +40,7 @@ func NewDbConn(cfg DbConfig, logger *logger.Logger) *gorm.DB {
 
 	logger.Info("Migrating tables...")
 	db.AutoMigrate(&userModel.User{})
+	db.AutoMigrate(&productsModel.Product{})
 
 	logger.Info("Database connection established.")
 	return db
