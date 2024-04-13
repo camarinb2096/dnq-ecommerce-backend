@@ -14,7 +14,7 @@ type (
 		CreateUser(user userModel.User) error
 		FindUserByEmail(email string) int
 		CountProducts() int
-		FindProducts(page, pageSize int) productsDto.Product
+		FindProducts(page, pageSize int) []productsDto.Product
 	}
 
 	repo struct {
@@ -47,9 +47,9 @@ func (r *repo) CountProducts() int {
 	r.db.Model(&productsModel.Product{}).Count(&count)
 	return int(count)
 }
-
-func (r *repo) FindProducts(page, pageSize int) productsDto.Product {
-	var products productsDto.Product
-	r.db.Limit(pageSize).Offset((page - 1) * pageSize).Find(&products).Scan(&products)
+func (r *repo) FindProducts(page, pageSize int) []productsDto.Product {
+	var products []productsDto.Product
+	offset := (page - 1) * pageSize
+	r.db.Limit(pageSize).Offset(offset).Find(&products)
 	return products
 }

@@ -8,15 +8,15 @@ type RequestParams struct {
 }
 
 type Response struct {
-	Message  string  `json:"message"`
-	Page     int     `json:"page"`
-	PageSize int     `json:"pageSize"`
-	Total    int     `json:"total"`
-	Data     Product `json:"data"`
+	Message  string    `json:"message"`
+	Page     int       `json:"page"`
+	PageSize int       `json:"pageSize"`
+	Total    int       `json:"total"`
+	Data     []Product `json:"data"`
 }
 
 type Product struct {
-	ProductId   string  `json:"productId"`
+	Id          int     `json:"id"`
 	Name        string  `json:"name"`
 	Description string  `json:"description"`
 	Price       float32 `json:"price"`

@@ -4,7 +4,6 @@ import (
 	"cmarin20/dnq-ecommerce/internal/config/db/repository"
 	productsDto "cmarin20/dnq-ecommerce/internal/products/dto"
 	"cmarin20/dnq-ecommerce/pkg/logger"
-	"fmt"
 	"strconv"
 )
 
@@ -39,8 +38,6 @@ func (s *service) GetProducts(requestParams productsDto.RequestParams) productsD
 	page, _ := strconv.Atoi(requestParams.Page)
 	pageSize, _ := strconv.Atoi(requestParams.PageSize)
 	products := s.repo.FindProducts(page, pageSize)
-
-	fmt.Println(page, pageSize, total, products)
 
 	return productsDto.Response{
 		Message:  "Products retrieved successfully",
