@@ -1,7 +1,7 @@
 package productsEndpoint
 
 import (
-	productsDto "cmarin20/dnq-ecommerce/internal/products/dto"
+	dtos "cmarin20/dnq-ecommerce/internal/dto"
 	productsService "cmarin20/dnq-ecommerce/internal/products/service"
 	"net/http"
 
@@ -24,7 +24,7 @@ func NewEndpoints(s productsService.Services) Endpoints {
 
 func getProducts(s productsService.Services) Controller {
 	return func(c *gin.Context) {
-		var requestParams productsDto.RequestParams
+		var requestParams dtos.RequestParams
 
 		requestParams.Page = c.DefaultQuery("page", "1")
 		requestParams.PageSize = c.DefaultQuery("pageSize", "10")

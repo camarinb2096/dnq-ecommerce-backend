@@ -2,13 +2,13 @@ package productsService
 
 import (
 	"cmarin20/dnq-ecommerce/internal/config/db/repository"
-	productsDto "cmarin20/dnq-ecommerce/internal/products/dto"
+	dtos "cmarin20/dnq-ecommerce/internal/dto"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"strconv"
 )
 
 type Services interface {
-	GetProducts(requestParams productsDto.RequestParams) productsDto.Response
+	GetProducts(requestParams dtos.RequestParams) dtos.Response
 }
 
 type service struct {
@@ -23,12 +23,12 @@ func NewService(repo repository.Repository, logger *logger.Logger) Services {
 	}
 }
 
-func (s *service) GetProducts(requestParams productsDto.RequestParams) productsDto.Response {
+func (s *service) GetProducts(requestParams dtos.RequestParams) dtos.Response {
 	s.logger.Info("Getting products...")
 
 	total := s.repo.CountProducts()
 	if total == 0 {
-		return productsDto.Response{
+		return dtos.Response{
 			Message: "No products found",
 			Total:   0,
 			Page:    1,
@@ -39,7 +39,7 @@ func (s *service) GetProducts(requestParams productsDto.RequestParams) productsD
 	pageSize, _ := strconv.Atoi(requestParams.PageSize)
 	products := s.repo.FindProducts(page, pageSize)
 
-	return productsDto.Response{
+	return dtos.Response{
 		Message:  "Products retrieved successfully",
 		Page:     page,
 		PageSize: pageSize,

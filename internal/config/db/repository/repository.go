@@ -1,7 +1,7 @@
 package repository
 
 import (
-	productsDto "cmarin20/dnq-ecommerce/internal/products/dto"
+	dtos "cmarin20/dnq-ecommerce/internal/dto"
 	productsModel "cmarin20/dnq-ecommerce/internal/products/model"
 	userModel "cmarin20/dnq-ecommerce/internal/user/model"
 	"cmarin20/dnq-ecommerce/pkg/logger"
@@ -14,7 +14,7 @@ type (
 		CreateUser(user userModel.User) error
 		FindUserByEmail(email string) int
 		CountProducts() int
-		FindProducts(page, pageSize int) []productsDto.Product
+		FindProducts(page, pageSize int) []dtos.Product
 	}
 
 	repo struct {
@@ -47,8 +47,8 @@ func (r *repo) CountProducts() int {
 	r.db.Model(&productsModel.Product{}).Count(&count)
 	return int(count)
 }
-func (r *repo) FindProducts(page, pageSize int) []productsDto.Product {
-	var products []productsDto.Product
+func (r *repo) FindProducts(page, pageSize int) []dtos.Product {
+	var products []dtos.Product
 	offset := (page - 1) * pageSize
 	r.db.Limit(pageSize).Offset(offset).Find(&products)
 	return products
