@@ -1,7 +1,7 @@
 package userEndpoint
 
 import (
-	userDto "cmarin20/dnq-ecommerce/internal/user/dto"
+	dtos "cmarin20/dnq-ecommerce/internal/dto"
 	userService "cmarin20/dnq-ecommerce/internal/user/service"
 	"encoding/json"
 
@@ -24,7 +24,7 @@ func NewEndpoints(s userService.Services) Endpoints {
 
 func createUser(s userService.Services) Controller {
 	return func(c *gin.Context) {
-		var user userDto.CreateRequest
+		var user dtos.CreateRequest
 		json.NewDecoder(c.Request.Body).Decode(&user)
 
 		err := s.CreateUser(user)
