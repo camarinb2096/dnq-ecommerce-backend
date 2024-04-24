@@ -37,7 +37,9 @@ func (s *service) GetProducts(requestParams dtos.RequestParams) dtos.Response {
 
 	page, _ := strconv.Atoi(requestParams.Page)
 	pageSize, _ := strconv.Atoi(requestParams.PageSize)
-	products := s.repo.FindProducts(page, pageSize)
+	name := requestParams.ProductName
+
+	products := s.repo.FindProducts(name, page, pageSize)
 
 	return dtos.Response{
 		Message:  "Products retrieved successfully",

@@ -5,6 +5,8 @@ import (
 	productsModel "cmarin20/dnq-ecommerce/internal/products/model"
 	userModel "cmarin20/dnq-ecommerce/internal/user/model"
 	"cmarin20/dnq-ecommerce/pkg/logger"
+	"fmt"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -14,7 +16,7 @@ type (
 		CreateUser(user userModel.User) error
 		FindUserByEmail(email string) int
 		CountProducts() int
-		FindProducts(page, pageSize int) []dtos.Product
+		FindProducts(name string, page, pageSize int) []dtos.Product
 	}
 
 	repo struct {
@@ -47,9 +49,12 @@ func (r *repo) CountProducts() int {
 	r.db.Model(&productsModel.Product{}).Count(&count)
 	return int(count)
 }
-func (r *repo) FindProducts(page, pageSize int) []dtos.Product {
+func (r *repo) FindProducts(name string, page, pageSize int) []dtos.Product {
 	var products []dtos.Product
 	offset := (page - 1) * pageSize
-	r.db.Limit(pageSize).Offset(offset).Find(&products)
+
+	likePatter := fmt.Sprintf("%%%s%%", strings.ToLower(name))
+
+	r.db.Where("LOWER (name) LIKE ?", likePatter).Limit(pageSize).Offset(offset).Find(&products)
 	return products
 }

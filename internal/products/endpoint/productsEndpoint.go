@@ -28,6 +28,7 @@ func getProducts(s productsService.Services) Controller {
 
 		requestParams.Page = c.DefaultQuery("page", "1")
 		requestParams.PageSize = c.DefaultQuery("pageSize", "10")
+		requestParams.ProductName = c.DefaultQuery("productName", "")
 		response := s.GetProducts(requestParams)
 		if response.Total == 0 {
 			c.JSON(http.StatusNotFound, response)
