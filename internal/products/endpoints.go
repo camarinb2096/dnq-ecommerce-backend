@@ -1,8 +1,7 @@
-package productsEndpoint
+package products
 
 import (
 	dtos "cmarin20/dnq-ecommerce/internal/dto"
-	productsService "cmarin20/dnq-ecommerce/internal/products/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,13 +15,13 @@ type (
 	}
 )
 
-func NewEndpoints(s productsService.Services) Endpoints {
+func NewEndpoints(s Services) Endpoints {
 	return Endpoints{
 		Get: getProducts(s),
 	}
 }
 
-func getProducts(s productsService.Services) Controller {
+func getProducts(s Services) Controller {
 	return func(c *gin.Context) {
 		var requestParams dtos.RequestParams
 

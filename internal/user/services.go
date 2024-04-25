@@ -1,9 +1,7 @@
-package userService
+package user
 
 import (
-	"cmarin20/dnq-ecommerce/internal/config/db/repository"
 	dtos "cmarin20/dnq-ecommerce/internal/dto"
-	userModel "cmarin20/dnq-ecommerce/internal/user/model"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"cmarin20/dnq-ecommerce/pkg/utils"
 	"fmt"
@@ -15,11 +13,11 @@ type Services interface {
 }
 
 type service struct {
-	repo   repository.Repository
+	repo   Repository
 	logger *logger.Logger
 }
 
-func NewService(repo repository.Repository, logger *logger.Logger) Services {
+func NewService(repo Repository, logger *logger.Logger) Services {
 	return &service{
 		repo:   repo,
 		logger: logger,
@@ -27,7 +25,7 @@ func NewService(repo repository.Repository, logger *logger.Logger) Services {
 }
 
 func (s *service) CreateUser(user dtos.CreateRequest) error {
-	var userModel userModel.User
+	var userModel User
 	s.logger.Info("Creating a new user...")
 
 	if user.Name == "" {

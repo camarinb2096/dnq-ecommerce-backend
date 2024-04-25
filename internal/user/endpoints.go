@@ -1,8 +1,7 @@
-package userEndpoint
+package user
 
 import (
 	dtos "cmarin20/dnq-ecommerce/internal/dto"
-	userService "cmarin20/dnq-ecommerce/internal/user/service"
 	"encoding/json"
 
 	"github.com/gin-gonic/gin"
@@ -16,13 +15,13 @@ type (
 	}
 )
 
-func NewEndpoints(s userService.Services) Endpoints {
+func NewEndpoints(s Services) Endpoints {
 	return Endpoints{
 		Post: createUser(s),
 	}
 }
 
-func createUser(s userService.Services) Controller {
+func createUser(s Services) Controller {
 	return func(c *gin.Context) {
 		var user dtos.CreateRequest
 		json.NewDecoder(c.Request.Body).Decode(&user)

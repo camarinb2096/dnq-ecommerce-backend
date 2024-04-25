@@ -1,11 +1,11 @@
 package db
 
 import (
-	productsModel "cmarin20/dnq-ecommerce/internal/products/model"
-	userModel "cmarin20/dnq-ecommerce/internal/user/model"
+	"cmarin20/dnq-ecommerce/internal/products"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"fmt"
 	"os"
+	"os/user"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -39,8 +39,8 @@ func NewDbConn(cfg DbConfig, logger *logger.Logger) *gorm.DB {
 	}
 
 	logger.Info("Migrating tables...")
-	db.AutoMigrate(&userModel.User{})
-	db.AutoMigrate(&productsModel.Product{})
+	db.AutoMigrate(&user.User{})
+	db.AutoMigrate(&products.Product{})
 
 	logger.Info("Database connection established.")
 	return db

@@ -1,7 +1,6 @@
-package productsService
+package products
 
 import (
-	"cmarin20/dnq-ecommerce/internal/config/db/repository"
 	dtos "cmarin20/dnq-ecommerce/internal/dto"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"strconv"
@@ -12,11 +11,11 @@ type Services interface {
 }
 
 type service struct {
-	repo   repository.Repository
+	repo   Repository
 	logger *logger.Logger
 }
 
-func NewService(repo repository.Repository, logger *logger.Logger) Services {
+func NewService(repo Repository, logger *logger.Logger) Services {
 	return &service{
 		repo:   repo,
 		logger: logger,
