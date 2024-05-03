@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cmarin20/dnq-ecommerce/internal/auth"
 	"cmarin20/dnq-ecommerce/internal/config/db"
 	"cmarin20/dnq-ecommerce/internal/config/server"
 	"cmarin20/dnq-ecommerce/internal/products"
@@ -29,8 +30,11 @@ func main() {
 	productsService := products.NewService(productsRepo, logger)
 	productsEndpoint := products.NewEndpoints(productsService)
 
+	authService := auth.NewService(userRepo, logger)
+	authEndpoints := auth.NewEndpoints(authService)
+
 	//GIN server instance
 	server := server.NewServer()
-	server.Routes(userEndpoints, productsEndpoint)
+	server.Routes(userEndpoints, productsEndpoint, authEndpoints)
 	server.Run(logger)
 }

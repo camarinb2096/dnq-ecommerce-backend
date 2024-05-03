@@ -1,6 +1,10 @@
 package auth
 
-import "github.com/gin-gonic/gin"
+import (
+	dtos "cmarin20/dnq-ecommerce/internal/dto"
+
+	"github.com/gin-gonic/gin"
+)
 
 type (
 	Controller func(c *gin.Context)
@@ -18,9 +22,21 @@ func NewEndpoints(s Services) Endpoints {
 
 func login(s Services) Controller {
 	return func(c *gin.Context) {
-		//TODO: Implement login endpoint
+		var data dtos.UserLogin
+		if err := c.ShouldBindJSON(&data); err != nil {
+			c.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+
+		token, err := s.Login(data)
+		if err != nil {
+			c.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+
 		c.JSON(200, gin.H{
-			"message": "Login endpoint",
-		})
+			"message": "Login successful",
+			"token":   token})
+
 	}
 }

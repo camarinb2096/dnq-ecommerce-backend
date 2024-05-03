@@ -3,6 +3,7 @@ package auth
 import (
 	"cmarin20/dnq-ecommerce/internal/user"
 	"cmarin20/dnq-ecommerce/pkg/logger"
+	"fmt"
 )
 
 type Services interface {
@@ -23,5 +24,7 @@ func NewService(repo user.Repository, logger *logger.Logger) Services {
 
 func (s *services) Login(data interface{}) (string, error) {
 	s.logger.Info("Logging in...")
+
+	fmt.Println("!!!", data)
 	return "", nil
 }
