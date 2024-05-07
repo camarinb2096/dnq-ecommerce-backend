@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"cmarin20/dnq-ecommerce/internal/auth/jwt"
 	dtos "cmarin20/dnq-ecommerce/internal/dto"
 	"cmarin20/dnq-ecommerce/internal/user"
 	"cmarin20/dnq-ecommerce/pkg/logger"
@@ -12,7 +13,7 @@ import (
 )
 
 type Services interface {
-	Login(data dtos.UserLogin) (string, error)
+	Login(data dtos.UserLogin) (dtos.UserLoged, error)
 }
 
 type services struct {
@@ -27,21 +28,30 @@ func NewService(repo user.Repository, logger *logger.Logger) Services {
 	}
 }
 
-func (s *services) Login(data dtos.UserLogin) (string, error) {
+func (s *services) Login(data dtos.UserLogin) (dtos.UserLoged, error) {
 
 	if !utils.IsValidEmail(data.Email) {
-		return "", fmt.Errorf("invalid email")
+		return dtos.UserLoged{}, fmt.Errorf("invalid email")
 	}
 
 	user := s.repo.FindUserByEmail(data.Email)
 	if user.Email != data.Email {
-		return "", fmt.Errorf("user not found")
+		return dtos.UserLoged{}, fmt.Errorf("user not found")
 	}
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(data.Password))
 	if err != nil {
-		return "", fmt.Errorf("invalid password")
+		return dtos.UserLoged{}, fmt.Errorf("invalid password")
 	}
 
-	return "", nil
+	token, err := jwt.GenerateToken(user.ID, user.FkRole)
+	if err != nil {
+		return dtos.UserLoged{}, fmt.Errorf("error generating token")
+	}
+
+	return dtos.UserLoged{
+		Name:  user.Name,
+		Email: user.Email,
+		Token: token,
+	}, nil
 }

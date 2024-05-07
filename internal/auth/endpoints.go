@@ -28,7 +28,7 @@ func login(s Services) Controller {
 			return
 		}
 
-		token, err := s.Login(data)
+		userLoged, err := s.Login(data)
 		if err != nil {
 			c.JSON(400, gin.H{"error": err.Error()})
 			return
@@ -36,7 +36,6 @@ func login(s Services) Controller {
 
 		c.JSON(200, gin.H{
 			"message": "Login successful",
-			"token":   token})
-
+			"data":    userLoged})
 	}
 }
