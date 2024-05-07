@@ -45,7 +45,7 @@ func (s *service) CreateUser(user dtos.CreateRequest) error {
 	}
 
 	existingUser := s.repo.FindUserByEmail(user.Email)
-	if existingUser != 0 {
+	if existingUser.Email == user.Email {
 		return fmt.Errorf("user already exists")
 	}
 

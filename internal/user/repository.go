@@ -9,7 +9,7 @@ import (
 type (
 	Repository interface {
 		CreateUser(user User) error
-		FindUserByEmail(email string) int
+		FindUserByEmail(email string) User
 	}
 
 	repo struct {
@@ -26,10 +26,10 @@ func NewRepository(db *gorm.DB, logger *logger.Logger) Repository {
 	}
 }
 
-func (r *repo) FindUserByEmail(email string) int {
+func (r *repo) FindUserByEmail(email string) User {
 	var user User
 	r.db.Where("email = ?", email).First(&user)
-	return int(user.ID)
+	return user
 }
 
 func (r *repo) CreateUser(user User) error {

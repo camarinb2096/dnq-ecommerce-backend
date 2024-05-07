@@ -1,13 +1,18 @@
 package auth
 
 import (
+	dtos "cmarin20/dnq-ecommerce/internal/dto"
 	"cmarin20/dnq-ecommerce/internal/user"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"fmt"
+
+	"cmarin20/dnq-ecommerce/pkg/utils"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Services interface {
-	Login(data interface{}) (string, error)
+	Login(data dtos.UserLogin) (string, error)
 }
 
 type services struct {
@@ -22,9 +27,21 @@ func NewService(repo user.Repository, logger *logger.Logger) Services {
 	}
 }
 
-func (s *services) Login(data interface{}) (string, error) {
-	s.logger.Info("Logging in...")
+func (s *services) Login(data dtos.UserLogin) (string, error) {
 
-	fmt.Println("!!!", data)
+	if !utils.IsValidEmail(data.Email) {
+		return "", fmt.Errorf("invalid email")
+	}
+
+	user := s.repo.FindUserByEmail(data.Email)
+	if user.Email != data.Email {
+		return "", fmt.Errorf("user not found")
+	}
+
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(data.Password))
+	if err != nil {
+		return "", fmt.Errorf("invalid password")
+	}
+
 	return "", nil
 }
