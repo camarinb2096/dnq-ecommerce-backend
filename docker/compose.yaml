@@ -11,4 +11,10 @@ services:
       - "3306:3306"
     volumes:
       - /home/camilo_marin/projects/mysql-data:/var/lib/mysql
+  app:
+    image: camarinb20/dnq_backend_test 
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
 
