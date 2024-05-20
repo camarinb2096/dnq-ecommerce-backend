@@ -1,7 +1,7 @@
 package user
 
 import (
-	dtos "cmarin20/dnq-ecommerce/internal/dto"
+	dtos "cmarin20/dnq-ecommerce/internal/app/dto"
 	"encoding/json"
 
 	"github.com/gin-gonic/gin"

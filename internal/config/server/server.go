@@ -1,9 +1,9 @@
 package server
 
 import (
-	"cmarin20/dnq-ecommerce/internal/auth"
-	"cmarin20/dnq-ecommerce/internal/products"
-	userEndpoint "cmarin20/dnq-ecommerce/internal/user"
+	"cmarin20/dnq-ecommerce/internal/app/auth"
+	"cmarin20/dnq-ecommerce/internal/app/products"
+	userEndpoint "cmarin20/dnq-ecommerce/internal/app/user"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 
 	"github.com/gin-gonic/gin"

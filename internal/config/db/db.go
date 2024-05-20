@@ -1,7 +1,7 @@
 package db
 
 import (
-	"cmarin20/dnq-ecommerce/internal/products"
+	"cmarin20/dnq-ecommerce/internal/app/products"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"fmt"
 	"os"

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"cmarin20/dnq-ecommerce/internal/auth"
+	"cmarin20/dnq-ecommerce/internal/app/auth"
+	"cmarin20/dnq-ecommerce/internal/app/products"
+	user "cmarin20/dnq-ecommerce/internal/app/user"
 	"cmarin20/dnq-ecommerce/internal/config/db"
 	"cmarin20/dnq-ecommerce/internal/config/server"
-	"cmarin20/dnq-ecommerce/internal/products"
-	user "cmarin20/dnq-ecommerce/internal/user"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 
 	"github.com/joho/godotenv"

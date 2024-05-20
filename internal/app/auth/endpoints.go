@@ -1,7 +1,7 @@
 package auth
 
 import (
-	dtos "cmarin20/dnq-ecommerce/internal/dto"
+	dtos "cmarin20/dnq-ecommerce/internal/app/dto"
 	"errors"
 
 	"github.com/gin-gonic/gin"

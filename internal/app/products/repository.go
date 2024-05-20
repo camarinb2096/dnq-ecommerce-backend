@@ -1,7 +1,7 @@
 package products
 
 import (
-	dtos "cmarin20/dnq-ecommerce/internal/dto"
+	dtos "cmarin20/dnq-ecommerce/internal/app/dto"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"fmt"
 	"strings"

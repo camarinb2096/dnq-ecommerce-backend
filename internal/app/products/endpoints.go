@@ -1,7 +1,7 @@
 package products
 
 import (
-	dtos "cmarin20/dnq-ecommerce/internal/dto"
+	dtos "cmarin20/dnq-ecommerce/internal/app/dto"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
