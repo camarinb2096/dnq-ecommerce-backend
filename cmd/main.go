@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-
 	app, err := di.Initialize()
 	if err != nil {
 		log.Fatalf("failed to init app: %v", err)
