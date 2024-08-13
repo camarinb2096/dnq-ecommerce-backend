@@ -1,9 +1,7 @@
-package repository
+package products
 
 import (
-	dtos "cmarin20/dnq-ecommerce/internal/dto"
-	productsModel "cmarin20/dnq-ecommerce/internal/products/model"
-	userModel "cmarin20/dnq-ecommerce/internal/user/model"
+	dtos "cmarin20/dnq-ecommerce/internal/app/dto"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 	"fmt"
 	"strings"
@@ -13,8 +11,6 @@ import (
 
 type (
 	Repository interface {
-		CreateUser(user userModel.User) error
-		FindUserByEmail(email string) int
 		CountProducts() int
 		FindProducts(name string, page, pageSize int) []dtos.Product
 	}
@@ -26,27 +22,16 @@ type (
 )
 
 // TODO: manage errors and response
-func NewUserRepo(db *gorm.DB, logger *logger.Logger) Repository {
+func NewRepository(db *gorm.DB, logger *logger.Logger) Repository {
 	return &repo{
 		db:     db,
 		logger: logger,
 	}
 }
 
-func (r *repo) FindUserByEmail(email string) int {
-	var user userModel.User
-	r.db.Where("email = ?", email).First(&user)
-	return int(user.ID)
-}
-
-func (r *repo) CreateUser(user userModel.User) error {
-	r.db.Create(&user)
-	return nil
-}
-
 func (r *repo) CountProducts() int {
 	var count int64
-	r.db.Model(&productsModel.Product{}).Count(&count)
+	r.db.Model(&Product{}).Count(&count)
 	return int(count)
 }
 func (r *repo) FindProducts(name string, page, pageSize int) []dtos.Product {

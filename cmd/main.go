@@ -1,13 +1,11 @@
 package main
 
 import (
+	"cmarin20/dnq-ecommerce/internal/app/auth"
+	"cmarin20/dnq-ecommerce/internal/app/products"
+	user "cmarin20/dnq-ecommerce/internal/app/user"
 	"cmarin20/dnq-ecommerce/internal/config/db"
-	"cmarin20/dnq-ecommerce/internal/config/db/repository"
 	"cmarin20/dnq-ecommerce/internal/config/server"
-	productsEndpoint "cmarin20/dnq-ecommerce/internal/products/endpoint"
-	productsService "cmarin20/dnq-ecommerce/internal/products/service"
-	userEndpoint "cmarin20/dnq-ecommerce/internal/user/endpoint"
-	userService "cmarin20/dnq-ecommerce/internal/user/service"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 
 	"github.com/joho/godotenv"
@@ -17,21 +15,26 @@ func main() {
 
 	logger := logger.NewLogger()
 
-	err := godotenv.Load()
+	err := godotenv.Load("../.env")
 	if err != nil {
 		logger.Fatal("Error loading .env file")
 	}
 
 	mysqlDb := db.NewDbConn(db.NewDbConfig(), logger)
 
-	dbRepository := repository.NewUserRepo(mysqlDb, logger)
-	userService := userService.NewService(dbRepository, logger)
-	userEndpoints := userEndpoint.NewEndpoints(userService)
-	productsService := productsService.NewService(dbRepository, logger)
-	productsEndpoint := productsEndpoint.NewEndpoints(productsService)
+	userRepo := user.NewRepository(mysqlDb, logger)
+	userService := user.NewService(userRepo, logger)
+	userEndpoints := user.NewEndpoints(userService)
+
+	productsRepo := products.NewRepository(mysqlDb, logger)
+	productsService := products.NewService(productsRepo, logger)
+	productsEndpoint := products.NewEndpoints(productsService)
+
+	authService := auth.NewService(userRepo, logger)
+	authEndpoints := auth.NewEndpoints(authService)
 
 	//GIN server instance
 	server := server.NewServer()
-	server.Routes(userEndpoints, productsEndpoint)
+	server.Routes(userEndpoints, productsEndpoint, authEndpoints)
 	server.Run(logger)
 }
