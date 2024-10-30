@@ -1,8 +1,11 @@
 package server
 
 import (
-	productsEndpoint "cmarin20/dnq-ecommerce/internal/products/endpoint"
-	userEndpoint "cmarin20/dnq-ecommerce/internal/user/endpoint"
+	"cmarin20/dnq-ecommerce/internal/app/auth"
+	"cmarin20/dnq-ecommerce/internal/app/products"
+	"cmarin20/dnq-ecommerce/internal/app/user"
+
+	// userEndpoint "cmarin20/dnq-ecommerce/internal/app/user"
 	"cmarin20/dnq-ecommerce/pkg/logger"
 
 	"github.com/gin-gonic/gin"
@@ -10,11 +13,22 @@ import (
 
 type Server struct {
 	router *gin.Engine
+	logger *logger.Logger
 }
 
-func NewServer() Server {
+func NewServer(
+	userEndpoint user.Endpoints,
+	productsEndpoint products.Endpoints,
+	authEndpoint auth.Endpoints,
+	logger *logger.Logger) *Server {
 	router := gin.Default()
-	s := Server{router: router}
+	s := &Server{
+		router: router,
+		logger: logger,
+	}
+
+	// Configurar rutas
+	s.Routes(userEndpoint, productsEndpoint, authEndpoint)
 	return s
 }
 
@@ -33,7 +47,7 @@ func configCors() gin.HandlerFunc {
 	}
 }
 
-func (s *Server) Routes(userEndpoint userEndpoint.Endpoints, productsEndpoint productsEndpoint.Endpoints) {
+func (s *Server) Routes(userEndpoint user.Endpoints, productsEndpoint products.Endpoints, authEndpoint auth.Endpoints) {
 	s.router.Use(configCors())
 	user := s.router.Group("/api/v1/user")
 	{
@@ -41,6 +55,14 @@ func (s *Server) Routes(userEndpoint userEndpoint.Endpoints, productsEndpoint pr
 			userEndpoint.Post(c)
 		})
 	}
+
+	auth := s.router.Group("/api/v1/login")
+	{
+		auth.POST("/", func(c *gin.Context) {
+			authEndpoint.Login(c)
+		})
+	}
+
 	product := s.router.Group("/api/v1/products")
 	{
 		product.GET("/", func(c *gin.Context) {
@@ -48,7 +70,7 @@ func (s *Server) Routes(userEndpoint userEndpoint.Endpoints, productsEndpoint pr
 		})
 	}
 }
-func (s *Server) Run(logger *logger.Logger) {
-	logger.Info("Starting the application...")
+func (s *Server) Run() {
+	s.logger.Info("Starting the application...")
 	s.router.Run()
 }
