@@ -1,40 +1,15 @@
 package main
 
 import (
-	"cmarin20/dnq-ecommerce/internal/app/auth"
-	"cmarin20/dnq-ecommerce/internal/app/products"
-	user "cmarin20/dnq-ecommerce/internal/app/user"
-	"cmarin20/dnq-ecommerce/internal/config/db"
-	"cmarin20/dnq-ecommerce/internal/config/server"
-	"cmarin20/dnq-ecommerce/pkg/logger"
-
-	"github.com/joho/godotenv"
+	"cmarin20/dnq-ecommerce/internal/di"
+	"log"
 )
 
 func main() {
-
-	logger := logger.NewLogger()
-
-	err := godotenv.Load("../.env")
+	app, err := di.Initialize()
 	if err != nil {
-		logger.Fatal("Error loading .env file")
+		log.Fatalf("failed to init app: %v", err)
 	}
 
-	mysqlDb := db.NewDbConn(db.NewDbConfig(), logger)
-
-	userRepo := user.NewRepository(mysqlDb, logger)
-	userService := user.NewService(userRepo, logger)
-	userEndpoints := user.NewEndpoints(userService)
-
-	productsRepo := products.NewRepository(mysqlDb, logger)
-	productsService := products.NewService(productsRepo, logger)
-	productsEndpoint := products.NewEndpoints(productsService)
-
-	authService := auth.NewService(userRepo, logger)
-	authEndpoints := auth.NewEndpoints(authService)
-
-	//GIN server instance
-	server := server.NewServer()
-	server.Routes(userEndpoints, productsEndpoint, authEndpoints)
-	server.Run(logger)
+	app.Server.Run()
 }
