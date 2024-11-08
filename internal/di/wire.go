@@ -15,6 +15,5 @@ type App struct {
 
 func Initialize() (*App, error) {
 	wire.Build(AppSet)
-
 	return &App{}, nil
 }
