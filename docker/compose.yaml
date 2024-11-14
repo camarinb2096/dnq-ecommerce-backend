@@ -11,5 +11,3 @@ services:
       - "3306:3306"
     volumes:
       - /home/camilo_marin/projects/mysql-data:/var/lib/mysql
-
-

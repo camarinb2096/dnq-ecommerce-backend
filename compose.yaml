@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   app:
-    image: camarinb20/dnq-backend
+    image: camarinb20/dnq-backend:v1
     ports:
       - 8080:8080
     env_file:

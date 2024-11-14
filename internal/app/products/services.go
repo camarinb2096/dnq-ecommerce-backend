@@ -8,6 +8,7 @@ import (
 
 type Services interface {
 	GetProducts(requestParams dtos.RequestParams) dtos.Response
+	GetProductByID(id int) (dtos.Product, error)
 }
 
 type service struct {
@@ -47,4 +48,13 @@ func (s *service) GetProducts(requestParams dtos.RequestParams) dtos.Response {
 		Total:    total,
 		Data:     products,
 	}
+}
+
+func (s *service) GetProductByID(id int) (dtos.Product, error) {
+	s.logger.Info("Getting product by ID...")
+	product, err := s.repo.FindProductByID(id)
+	if err != nil {
+		return product, err
+	}
+	return product, nil
 }

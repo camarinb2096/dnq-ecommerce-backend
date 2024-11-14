@@ -13,6 +13,7 @@ type (
 	Repository interface {
 		CountProducts() int
 		FindProducts(name string, page, pageSize int) []dtos.Product
+		FindProductByID(id int) (dtos.Product, error)
 	}
 
 	repo struct {
@@ -42,4 +43,13 @@ func (r *repo) FindProducts(name string, page, pageSize int) []dtos.Product {
 
 	r.db.Where("LOWER (name) LIKE ?", likePatter).Limit(pageSize).Offset(offset).Find(&products)
 	return products
+}
+
+func (r *repo) FindProductByID(id int) (dtos.Product, error) {
+	var product dtos.Product
+	err := r.db.First(&product, id).Error
+	if err != nil {
+		return product, err
+	}
+	return product, nil
 }

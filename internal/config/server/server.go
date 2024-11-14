@@ -68,6 +68,9 @@ func (s *Server) Routes(userEndpoint user.Endpoints, productsEndpoint products.E
 		product.GET("/", func(c *gin.Context) {
 			productsEndpoint.Get(c)
 		})
+		product.GET("/:id", func(c *gin.Context) {
+			productsEndpoint.GetByID(c)
+		})
 	}
 }
 func (s *Server) Run() {

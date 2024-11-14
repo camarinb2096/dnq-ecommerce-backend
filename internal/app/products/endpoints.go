@@ -3,6 +3,7 @@ package products
 import (
 	dtos "cmarin20/dnq-ecommerce/internal/app/dto"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,13 +12,15 @@ type (
 	Controller func(c *gin.Context)
 
 	Endpoints struct {
-		Get Controller
+		Get     Controller
+		GetByID Controller
 	}
 )
 
 func NewEndpoints(s Services) Endpoints {
 	return Endpoints{
-		Get: getProducts(s),
+		Get:     getProducts(s),
+		GetByID: getByID(s),
 	}
 }
 
@@ -35,5 +38,23 @@ func getProducts(s Services) Controller {
 		}
 
 		c.JSON(http.StatusOK, response)
+	}
+}
+
+func getByID(s Services) Controller {
+	return func(c *gin.Context) {
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+			return
+		}
+
+		product, err := s.GetProductByID(id)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "product not found"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"data": product})
 	}
 }

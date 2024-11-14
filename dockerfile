@@ -1,5 +1,5 @@
 # Etapa de compilación
-FROM golang:1.21.5-alpine AS builder
+FROM golang:1.22-alpine AS builder
 
 WORKDIR /app
 
@@ -20,9 +20,3 @@ COPY --from=builder /app/dnq-backend /app/dnq-backend
 EXPOSE 8080
 
 CMD ["./dnq-backend"]
-
-COPY --from=builder /app/dnq-backend .
-
-CMD ["./dnq-backend"]
-
-EXPOSE 8080
