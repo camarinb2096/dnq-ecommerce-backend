@@ -31,6 +31,7 @@ func NewDbConfig() DbConfig {
 }
 
 func NewDbConn(cfg DbConfig, logger *logger.Logger) *gorm.DB {
+	fmt.Println(cfg)
 	logger.Info("Opening a new database connection...")
 	connStr := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
